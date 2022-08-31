@@ -87,7 +87,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@v2-latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
-    <script src="utils/oauth.js"></script>
+    <script src="../utils/oauth.js"></script>
     <script src="util.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -111,6 +111,27 @@
         </div>
     </script>
 
+    <!-- template for the profile component --
+    <script type="text/x-template" id="profile-template">
+        <section class="user-profile">
+            <div @click="profileLinkListener" class="profile-link">
+                <a href="#" aria-label="Click to view user's profile in Genesys Cloud">
+                    <div v-bind:class="{'placeholder-pic':true, hidden:imageUri}" aria-label="User profile picture missing">?</div>
+                    <img v-bind:class="{'profile-pic':true, hidden:!imageUri}" v-bind:src="imageUri" aria-label="Profile picture for User">
+                </a>
+            </div>
+            <div class="base-info">
+                <div class="name">{{ profileData.name }}</div>
+                <div class="email">{{ profileData.email }}</div>
+                <div class="department">{{ profileData.department }}</div>
+            </div>
+        </section>
+    </script>
+    
+    <!-- template for the conversations component -->
+
+   
+
 
     <script type="text/x-template" id="conversations-template">
         <section class="conversation-list">
@@ -126,6 +147,64 @@
              
         </section>
     </script>
+
+    <!-- template for the conversations component --
+    <script type="text/x-template" id="tester-template">
+        <section class="manual-tester">
+            <form @submit.prevent="getConversationOrEvaluation">
+                <h2>Manual Tester</h2>
+                <div class="form-group conversation-id">
+                    <label for="conversation-id">Conversation ID:</label>
+                    <input type="text"
+                        class="form-control"
+                        id="conversation-id"
+                        v-model="convId">
+                </div>
+                <div class="form-group evaluation-id">
+                    <label for="evaluation-id">Evaluation ID:</label>
+                    <input type="text"
+                        class="form-control"
+                        id="evaluation-id"
+                        v-model="evalId">
+                </div>
+                <div class="form-group">
+                    <button type="submit"
+                        class="btn btn-primary"
+                        v-bind:class="{'disabled':!this.convId}">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </section>
+    </script>
+    <!-- app -->
+    <div id="app">
+        <!-- authenticating placeholder-->
+        <authenticating :error-message="errorMessage"
+                        :authenticated="authenticated">
+
+        </authenticating>
+
+        <!-- user profile -->
+        <profile :profile-data="profileData"
+                v-bind:class="{'hidden':!this.authenticated}">
+
+        </profile>
+
+        <!-- evaluation list -->
+        <conversations :conversations-data="conversationsData"
+                    v-bind:class="{'hidden':!this.authenticated}">
+
+        </conversations>
+
+        <!-- manual tester -->
+        <tester v-bind:class="{'hidden':!this.authenticated}">
+
+        </tester>
+    </div>
+
+
+
 
 </div> 
 <script src="app.js"></script>
