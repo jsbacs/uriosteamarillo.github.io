@@ -128,6 +128,7 @@ async function generarCallBack(ani) {
         queueId: convesationQueueId === 'undefined'? queueId : convesationQueueId,
         preferredAgentIds: [agentUserId],
       },
+      queueId :convesationQueueId === 'undefined'? queueId : convesationQueueId,
       scriptId: conversationScriptId === 'undefined'? scriptId : convesationQueueId,
       callbackUserName: ani, //cambiar por numero
       callbackNumbers: [ani],
