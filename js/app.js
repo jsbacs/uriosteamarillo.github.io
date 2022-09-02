@@ -3,6 +3,9 @@ const platformClient = require("platformClient");
 var agentUserId = "";
 const scriptId = "673f19cf-071e-4139-bb4e-7980ecf528fc";
 const queueId = "723548df-b358-4330-b4b8-7362afb76078";
+
+var conversationScriptId = '';
+var convesationQueueId = '';
 Vue.prototype.$clientApp = null;
 Vue.prototype.$usersApi = null;
 Vue.prototype.$conversationsApi = null;
@@ -79,6 +82,17 @@ new Vue({
         return usersApi.getUsersMe({ expand: ["presence"] });
       })
       .then(async (profileData) => {
+        conversationsApi.getConversations()
+        .then((data) => {
+          convesationQueueId = data.entities[0].participants[0].queueId
+          conversationScriptId = data.entities[0].participants[0].attributes.scriptId
+         console.log(convesationQueueId)
+         console.log(conversationScriptId)
+        })
+        .catch((err) => {
+          console.log('There was a failure calling getConversations');
+          console.error(err);
+        });
         this.profileData = profileData;
         agentUserId = profileData.id;
         try {
@@ -97,19 +111,29 @@ new Vue({
   },
 });
 
+async function getCurrentConversationsAttibutes(){
+
+
+
+}
+
+
 async function generarCallBack(ani) {
   try {
     conversationsApi = new platformClient.ConversationsApi();
+
+    
     const callbackData = {
       routingData: {
-        queueId: queueId,
+        queueId: convesationQueueId === 'undefined'? queueId : convesationQueueId,
         preferredAgentIds: [agentUserId],
       },
-      scriptId: scriptId,
-      callbackUserName: "Whatsapp Saliente",
+      scriptId: conversationScriptId === 'undefined'? scriptId : convesationQueueId,
+      callbackUserName: ani, //cambiar por numero
       callbackNumbers: [ani],
       data: {
         numeroWhatsapp: ani,
+        label_numero_whatsapp:ani
       },
       callerId: "",
       callerIdName: "",
