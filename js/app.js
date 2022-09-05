@@ -84,10 +84,18 @@ new Vue({
       .then(async (profileData) => {
         conversationsApi.getConversations()
         .then((data) => {
+          try {
+                      
           convesationQueueId = data.entities[0].participants[0].queueId
           conversationScriptId = data.entities[0].participants[0].attributes.scriptId
          console.log(convesationQueueId)
          console.log(conversationScriptId)
+          } catch (error) {
+            console.error(error);
+            // expected output: ReferenceError: nonExistentFunction is not defined
+            // Note - error messages will vary depending on browser
+          }
+
         })
         .catch((err) => {
           console.log('There was a failure calling getConversations');
@@ -125,10 +133,10 @@ async function generarCallBack(ani) {
     
     const callbackData = {
       routingData: {
-        queueId: convesationQueueId === 'undefined'? queueId : convesationQueueId,
+        queueId: convesationQueueId === 'undefined' || convesationQueueId === '' ? queueId : convesationQueueId,
         preferredAgentIds: [agentUserId],
       },
-      scriptId: conversationScriptId === 'undefined'? scriptId : conversationScriptId,
+      scriptId: conversationScriptId === 'undefined' || conversationScriptId === '' ? scriptId : conversationScriptId,
       callbackUserName: ani, //cambiar por numero
       callbackNumbers: [ani],
       data: {
