@@ -1,8 +1,8 @@
 const platformClient = require("platformClient");
 
 var agentUserId = "";
-const scriptId = "673f19cf-071e-4139-bb4e-7980ecf528fc";
-const queueId = "723548df-b358-4330-b4b8-7362afb76078";
+const scriptId = "389ce9e3-6345-4ffc-99de-ac26e434eb41";
+const queueId = "01e8bb94-cb2c-4f96-8303-75cc7aa1949b";
 
 var conversationScriptId = '';
 var convesationQueueId = '';
